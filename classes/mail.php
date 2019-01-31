@@ -15,9 +15,9 @@ class mail
 
     public function __construct()
     {
-        $this->destinataire = filter_var(isset($_POST['destinataire']), FILTER_SANITIZE_STRING);
-        $this->objet = filter_var(isset($_POST['objet']), FILTER_SANITIZE_STRING);
-        $this->message = filter_var(isset($_POST['message']), FILTER_SANITIZE_STRING);
+        $this->destinataire = filter_var(isset($_POST['destinataire']) ? $_POST['destinataire'] : NULL, FILTER_SANITIZE_STRING);
+        $this->objet = filter_var(isset($_POST['objet']) ? $_POST['objet'] : NULL, FILTER_SANITIZE_STRING);
+        $this->message = filter_var(isset($_POST['message']) ? $_POST['message'] : NULL, FILTER_SANITIZE_STRING);
         $this->expediteur = "florence.soudain@laposte.net";
     }
 
@@ -27,8 +27,9 @@ class mail
         {
             $header = "From: florence.soudain@laposte.net" . "\r\n" .
             'Reply-To: florence.soudain@laposte.net' . "\r\n" .
+                "Content-type: text/html; charset= UTF-8" . "\r\n"  .
             'X-Mailer: PHP/' . phpversion();
-            mail($this->destinataire, $this->objet ,$this->message, $header);
+            mail($this->destinataire, utf8_encode($this->objet), $this->message, $header);
             echo "Message envoyé";
         }
     }
